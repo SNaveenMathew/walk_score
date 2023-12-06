@@ -27,11 +27,11 @@ for(ygl_url in ygl_urls) {
     colnames(temp_df) <- c("Price", "Beds", "Baths", "Availability", "Address")
     df <- plyr::rbind.fill(df, temp_df)
   }
-  
-  df$Price <- as.integer(gsub(pattern = "[^0-9]", replacement = "", x = df$Price))
-  df$Beds <- as.integer(sapply(strsplit(df$Beds, " "), function(x) x[1]))
-  df$Availability <- gsub(pattern = "^Available ", replacement = "", x = df$Availability)
 }
+df$Price <- as.integer(gsub(pattern = "[^0-9]", replacement = "", x = df$Price))
+df$Beds <- as.integer(sapply(strsplit(df$Beds, " "), function(x) x[1]))
+df$Baths <- as.integer(sapply(strsplit(df$Baths, " "), function(x) x[1]))
+df$Availability <- gsub(pattern = "^Available ", replacement = "", x = df$Availability)
 df <- unique(df)
 saveRDS(df, "ygl_data.Rds")
 openxlsx::write.xlsx(df, "ygl_data.xlsx")
