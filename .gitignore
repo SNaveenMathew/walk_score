@@ -1,3 +1,5 @@
 Data/*.*
 .Rhistory
-walkscore_API_key.txt
+*.xlsx
+*.Rds
+*.txt
