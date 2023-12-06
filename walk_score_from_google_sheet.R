@@ -1,34 +1,11 @@
 library(openxlsx)
 library(walkscoreAPI)
+source("walk_score_utils.R")
 
 walkscore_API_key <- readLines("walkscore_API_key.txt")
-get_walk_score <- function(address, lat, lon) {
-  url <- paste0("https://api.walkscore.com/score?format=json&address=", address,
-                "&lat=", lat, "&lon=", lon,
-                "&wsapikey=", walkscore_API_key)
-  return(httr::GET(url, httr::accept_json()))
-}
-
-get_transit_score <- function(lat, lon, city, state) {
-  url <- paste0("https://transit.walkscore.com/transit/score/?lat=", lat,
-                "&lon=", lon, "&city=", city, "&state=", state,
-                "&wsapikey=", walkscore_API_key)
-  return(httr::GET(url, httr::accept_json()))
-}
-
-first_element <- function(x) {
-  return(x[1])
-}
 
 redfin_data <- openxlsx::read.xlsx(xlsxFile = "Data/Apartment.xlsx", sheet = "Consolidated", startRow = 2)
-redfin_data$Address_Only <- sapply(strsplit(
-  sapply(strsplit(x = gsub(
-    x = redfin_data$Address,
-    pattern = "\\.",
-    replacement = " "),
-    split = " Unit"), first_element
-  ), split = " \\#"), first_element
-)
+redfin_data$Address_Only <- get_address_only(redfin_data$Address)
 
 redfin_data$Address_for_URL <- gsub(
   x = paste(
