@@ -6,7 +6,7 @@ for(ygl_url in ygl_urls) {
   res <- httr::GET(ygl_url)
   ygl_url_base <- substr(x = ygl_url, start = 1, stop = nchar(ygl_url)-1)
   parsed <- XML::htmlTreeParse(httr::content(res), useInternalNodes = T)
-  num_pages <- xpathSApply(doc = parsed, path = "//*/div[@class='counter']", XML::xmlValue)
+  num_pages <- XML::xpathSApply(doc = parsed, path = "//*/div[@class='counter']", XML::xmlValue)
   num_pages <- as.integer(gsub(pattern = "[0-9]* of ", replacement = "", x = num_pages))
   
   for(i in 1:num_pages) {
